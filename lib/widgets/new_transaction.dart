@@ -1,9 +1,14 @@
+import 'package:expenses_app/widgets/transaction_list.dart';
 import 'package:flutter/material.dart';
+import 'package:expenses_app/main.dart';
+
+import '../models/person.dart';
 
 class NewTransaction extends StatefulWidget {
   final Function addTx;
+  final _peopleGroup;
 
-  NewTransaction(this.addTx);
+  NewTransaction(this.addTx, this._peopleGroup);
 
   @override
   State<NewTransaction> createState() => _NewTransactionState();
@@ -30,10 +35,13 @@ class _NewTransactionState extends State<NewTransaction> {
         enteredAmount <= 0) return;
 
     widget.addTx(enteredTitle, enteredAmount, enteredFrom, enteredTo);
+
+    Navigator.of(context).pop();
   }
 
   @override
   Widget build(BuildContext context) {
+    var _peopleGroup = widget._peopleGroup;
     return Card(
       elevation: 5,
       child: Container(
@@ -53,6 +61,15 @@ class _NewTransactionState extends State<NewTransaction> {
               ),
               controller: amountController,
               keyboardType: TextInputType.number,
+            ),
+            DropdownButton(
+              items: _peopleGroup.map<DropdownMenuItem<Person>>((Person p) {
+                return DropdownMenuItem<Person>(
+                  value: p,
+                  child: Text(p.name),
+                );
+              }).toList(),
+              onChanged: (_) => submitData(),
             ),
             TextField(
               decoration: InputDecoration(

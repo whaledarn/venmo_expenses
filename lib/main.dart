@@ -31,7 +31,7 @@ class _MyHomePageState extends State<MyHomePage> {
         builder: (_) {
           return Wrap(children: [
             GestureDetector(
-              child: NewTransaction(_addNewTransaction),
+              child: NewTransaction(_addNewTransaction, _peopleGroup),
               onTap: () {},
               behavior: HitTestBehavior.opaque,
             )

@@ -14,10 +14,12 @@ class _NewPersonState extends State<NewPerson> {
 
   void submitData() {
     final enteredName = nameController.text;
+    final enteredValue = 0.0;
 
     if (enteredName.isEmpty) return;
 
-    widget.addPs(enteredName);
+    widget.addPs(enteredName, enteredValue);
+    Navigator.of(context).pop();
   }
 
   @override
