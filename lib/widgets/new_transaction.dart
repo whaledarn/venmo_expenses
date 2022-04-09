@@ -19,19 +19,19 @@ class _NewTransactionState extends State<NewTransaction> {
 
   final amountController = TextEditingController();
 
-  final fromController = TextEditingController();
+  String? fromController = "";
 
-  final toController = TextEditingController();
+  String? toController = "";
 
   void submitData() {
     final enteredTitle = titleController.text;
     final enteredAmount = double.parse(amountController.text);
-    final enteredFrom = fromController.text;
-    final enteredTo = toController.text;
+    final enteredFrom = fromController;
+    final enteredTo = toController;
 
     if (enteredTitle.isEmpty ||
-        enteredFrom.isEmpty ||
-        enteredTo.isEmpty ||
+        enteredFrom == "" ||
+        enteredTo == "" ||
         enteredAmount <= 0) return;
 
     widget.addTx(enteredTitle, enteredAmount, enteredFrom, enteredTo);
@@ -42,6 +42,9 @@ class _NewTransactionState extends State<NewTransaction> {
   @override
   Widget build(BuildContext context) {
     var _peopleGroup = widget._peopleGroup;
+    var hint = "Person paying";
+    var hint2 = "Peope who owe money";
+
     return Card(
       elevation: 5,
       child: Container(
@@ -63,27 +66,31 @@ class _NewTransactionState extends State<NewTransaction> {
               keyboardType: TextInputType.number,
             ),
             DropdownButton(
-              items: _peopleGroup.map<DropdownMenuItem<Person>>((Person p) {
-                return DropdownMenuItem<Person>(
-                  value: p,
-                  child: Text(p.name),
-                );
-              }).toList(),
-              onChanged: (_) => submitData(),
-            ),
-            TextField(
-              decoration: InputDecoration(
-                labelText: 'Person Paying',
-              ),
-              controller: fromController,
-            ),
-            TextField(
-              decoration: InputDecoration(
-                labelText: 'People',
-              ),
-              controller: toController,
-              onSubmitted: (_) => submitData(),
-            ),
+                hint: Text(hint),
+                isExpanded: true,
+                items: _peopleGroup.map<DropdownMenuItem<Person>>((Person p) {
+                  return DropdownMenuItem<Person>(
+                    value: p,
+                    child: Text(p.name),
+                  );
+                }).toList(),
+                onChanged: (Person? p) {
+                  fromController = p!.name;
+                  submitData();
+                }),
+            DropdownButton(
+                hint: Text(hint2),
+                isExpanded: true,
+                items: _peopleGroup.map<DropdownMenuItem<Person>>((Person p) {
+                  return DropdownMenuItem<Person>(
+                    value: p,
+                    child: Text(p.name),
+                  );
+                }).toList(),
+                onChanged: (Person? p) {
+                  toController = p!.name;
+                  submitData();
+                }),
             FlatButton(
               onPressed: () {
                 submitData();
